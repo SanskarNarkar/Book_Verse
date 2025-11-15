@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookVerse - Online Book Store</title>
+    {% load static %}
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <style>
+        /* Make entire card clickable */
+        .book-detail {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    {% load static %}
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <i class="fas fa-book-open me-2"></i>BookVerse
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'index' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#categories-section">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#featured-section">Best Sellers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'books' %}">All Books</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'cart' %}">Cart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'orders' %}">Orders</a>
+                    </li>
+                    <li class="nav-item d-none" data-role="nav-account">
+                        <a class="nav-link" href="{% url 'account' %}">My Account</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="{% url 'login' %}" class="btn btn-primary me-2" data-role="nav-login">Login</a>
+                    <a href="{% url 'signup_page' %}" class="btn btn-outline-light me-2" data-role="nav-signup">Sign Up</a>
+                    <a href="#" class="btn btn-danger d-none" data-role="nav-logout">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section bg-primary text-white py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1 class="display-4 fw-bold">Discover Your Next Favorite Book</h1>
+                    <p class="lead">Explore thousands of books across multiple genres. Find your perfect read today!</p>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control form-control-lg" id="search-input"
+                               placeholder="Search books, authors, or categories...">
+                        <button class="btn btn-light" type="button" id="search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <img src="https://placehold.co/600x400/ffffff/007bff?text=Reading+Is+Magic" alt="Book reading" class="img-fluid rounded">
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Categories Section -->
+<section class="py-5" id="categories-section">
+    <div class="container">
+        <h2 class="text-center mb-4">Popular Categories</h2>
+        <div class="row">
+            <div class="col-md-3 col-6 mb-3">
+                <div class="card category-card text-center" data-category="fiction">
+                    <div class="card-body">
+                        <i class="fas fa-hat-wizard fa-3x mb-3 text-primary"></i>
+                        <h5>Fiction</h5>
+                        <p class="text-muted">Explore imaginary worlds</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="card category-card text-center" data-category="non-fiction">
+                    <div class="card-body">
+                        <i class="fas fa-microscope fa-3x mb-3 text-primary"></i>
+                        <h5>Non-Fiction</h5>
+                        <p class="text-muted">Real stories, real facts</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="card category-card text-center" data-category="academic">
+                    <div class="card-body">
+                        <i class="fas fa-graduation-cap fa-3x mb-3 text-primary"></i>
+                        <h5>Academic</h5>
+                        <p class="text-muted">Educational materials</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="card category-card text-center" data-category="children">
+                    <div class="card-body">
+                        <i class="fas fa-child fa-3x mb-3 text-primary"></i>
+                        <h5>Children</h5>
+                        <p class="text-muted">Books for young readers</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section></section>
+<!-- Featured Books Section -->
+<section class="py-5 bg-light" id="featured-section">
+    <div class="container">
+        <h2 class="text-center mb-4">Featured Books</h2>
+        <div class="row" id="featured-books">
+            <div class="col-12 text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading books...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Book Detail Modal -->
+<div class="modal fade" id="bookDetailModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 id="bookDetailTitle" class="modal-title"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <img id="bookDetailImage" class="img-fluid mb-3" alt="">
+        <p><strong>Author:</strong> <span id="bookDetailAuthor"></span></p>
+        <p><strong>Price:</strong> $<span id="bookDetailPrice"></span></p>
+        <p id="bookDetailDescription"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>BookVerse</h5>
+                    <p>Your one-stop destination for all books.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">About Us</a></li>
+                        <li><a href="#" class="text-white">Contact</a></li>
+                        <li><a href="#" class="text-white">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Connect</h5>
+                    <div class="social-links">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-2x"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-2x"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-instagram fa-2x"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/books.js' %}"></script>
+</body>
+</html>
